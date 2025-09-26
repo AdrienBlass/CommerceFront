@@ -1,0 +1,83 @@
+# ==============================
+# Logs
+# ==============================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+lerna-debug.log*
+
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# ==============================
+# Runtime data
+# ==============================
+pids
+*.pid
+*.seed
+*.pid.lock
+.DS_Store
+
+# ==============================
+# Dependency directories
+# ==============================
+node_modules/
+jspm_packages/
+
+# ==============================
+# Build / output directories
+# ==============================
+build/
+dist/
+coverage/
+.nyc_output
+.next/
+.nuxt/
+.vuepress/dist
+.serverless/
+.fusebox/
+.webpack/
+.vite/
+out/
+.cache/
+
+# ==============================
+# TypeScript
+# ==============================
+*.tsbuildinfo
+typings/
+
+# ==============================
+# npm / Yarn / pnpm
+# ==============================
+.npm/
+.yarn-integrity
+.pnpm-store/
+
+# ==============================
+# Environment files
+# ==============================
+.env
+.env.test
+.env.local
+.env.production
+.env.development
+
+# ==============================
+# Editor / IDE
+# ==============================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ==============================
+# Misc / OS
+# ==============================
+.DS_Store
+Thumbs.db
+*.bak
+*.swp
