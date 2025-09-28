@@ -131,7 +131,7 @@ h1 {
 
 .article-row {
   display: grid;
-  grid-template-columns: 1fr 0.8fr 2fr 1fr 1fr 0.8fr 1fr 1fr 1fr 1fr 1fr 0.8fr 0.5fr;
+  grid-template-columns: 1fr 0.8fr 2fr 1fr 1fr 0.8fr 1fr 1fr 1fr 1fr 1fr 0.8fr 0.5fr ;
   gap: 1px;
   background-color: #f8f9fa;
 }

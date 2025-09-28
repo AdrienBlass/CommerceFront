@@ -19,7 +19,12 @@ export default function ArticlesList() {
         nomArticle: '',
         dateAchat: '',
         prixAchatHt: '',
+        prixAchatHtUnitaire: '',
+
         prixVenteTtc: '',
+        prixVenteTtcUnitaire: '',
+        prixAchatTtcUnitaire: '',
+
         quantite: '',
         tva: '',
         tvaVente: '' 
@@ -42,11 +47,6 @@ export default function ArticlesList() {
         e.preventDefault();
         if (!form.codeArticle) {
             alert("Le code article est obligatoire !");
-            return;
-        }
-        const exists = articles.some(a => a.codeArticle === form.codeArticle);
-        if (exists) {
-            alert("Ce code article existe déjà !");
             return;
         }
 
@@ -83,25 +83,25 @@ export default function ArticlesList() {
         }
     };
 
-    const handleDelete = (codeArticle) => {
-        fetch(`http://localhost:9090/api/article/${codeArticle}`, {
+    const handleDelete = (idArticle) => {
+        fetch(`http://localhost:9090/api/article/${idArticle}`, {
             method: 'DELETE'
         })
             .then(response => {
                 if (response.ok) {
-                    setArticles(prev => prev.filter(a => a.codeArticle !== codeArticle));
+                    setArticles(prev => prev.filter(a => a.idArticle !== idArticle));
                 }
             });
     };
 
     const startEditing = (article) => {
-        setEditingPrice(article.codeArticle);
+        setEditingPrice(article.idArticle);
         setTempPrice(article.prixVenteReel || '');
     };
 
-    const savePrice = async (codeArticle) => {
+    const savePrice = async (idArticle) => {
         try {
-            const articleToUpdate = articles.find(a => a.codeArticle === codeArticle);
+            const articleToUpdate = articles.find(a => a.idArticle === idArticle);
             if (!articleToUpdate) return;
 
             const updatedArticle = {
@@ -109,7 +109,7 @@ export default function ArticlesList() {
                 prixVenteReel: parseFloat(tempPrice) || 0
             };
 
-            const response = await fetch(`http://localhost:9090/api/article/${codeArticle}`, {
+            const response = await fetch(`http://localhost:9090/api/article/${idArticle}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedArticle)
@@ -121,7 +121,7 @@ export default function ArticlesList() {
             }
 
             const data = await response.json();
-            setArticles(prev => prev.map(a => a.codeArticle === codeArticle ? data : a));
+            setArticles(prev => prev.map(a => a.idArticle === idArticle ? data : a));
             setEditingPrice(null);
             setTempPrice('');
 
@@ -136,9 +136,9 @@ export default function ArticlesList() {
         setTempPrice('');
     };
 
-    const handleKeyPress = (e, codeArticle) => {
+    const handleKeyPress = (e, idArticle) => {
         if (e.key === 'Enter') {
-            savePrice(codeArticle);
+            savePrice(idArticle);
         } else if (e.key === 'Escape') {
             cancelEditing();
         }
@@ -173,6 +173,10 @@ export default function ArticlesList() {
                         <div className="form-group">
                             <label>Nom Article</label>
                             <input name="nomArticle" placeholder="Nom" value={form.nomArticle} onChange={handleChange} />
+                        </div>
+                        <div className="form-group">
+                            <label>Quantité</label>
+                            <input name="quantite" type="number" placeholder="Quantite" value={form.quantite} onChange={handleChange} />
                         </div>
                         <div className="form-group">
                             <label>Date Achat</label>
@@ -224,26 +228,33 @@ export default function ArticlesList() {
                         <div className="article-cell">Code</div>
                         <div className="article-cell">Désignation</div>
                         <div className="article-cell">Date d'achat</div>
+                        <div className="article-cell">Quantité</div>
                         <div className="article-cell">Prix d'achat HT</div>
+                        <div className="article-cell">Prix d'achat HT Unitaire</div>
                         <div className="article-cell">Taux de TVA</div>
                         <div className="article-cell">Montant TVA</div>
                         <div className="article-cell">Prix d'achat TTC</div>
-                        <div className="article-cell">Prix de vente conseillé HT</div>
-                        <div className="article-cell">Prix de vente conseillé TTC</div>
+                        <div className="article-cell">Prix d'achat TTC unitaire</div>
+                        <div className="article-cell">Coefficient Magoré</div>
+
+                        <div className="article-cell">Prix de vente conseillé TTC Unitaire</div>
+
                         <div className="article-cell">Prix de Vente Réel</div>
                         <div className="article-cell">TVA Vente</div>
                         <div className="article-cell no-print">Supprimer</div>
                     </div>
                     
                     {filteredArticles.map(article => (
-                        <div key={article.codeArticle} className="article-row">
+                        <div key={article.idArticle} className="article-row">
                             <div className="article-cell">{article.nomFournisseur}</div>
                             <div className="article-cell">{article.codeArticle}</div>
                             <div className="article-cell">{article.nomArticle}</div>
                             <div className="article-cell">
                                 {article.dateAchat ? new Date(article.dateAchat).toLocaleDateString() : ''}
                             </div>
+                            <div className="article-cell">{article.quantite}</div>
                             <div className="article-cell">{article.prixAchatHt}</div>
+                            <div className="article-cell">{article.prixAchatHtUnitaire}</div>
                             <div className="article-cell">
                                 {article.tva === 'TVA_5_5' ? '5.5%' :
                                  article.tva === 'TVA_10' ? '10%' :
@@ -252,25 +263,25 @@ export default function ArticlesList() {
                             </div>
                             <div className="article-cell">{article.montantTva}</div>
                             <div className="article-cell">{article.prixAchatTtc}</div>
+                            <div className="article-cell">{article.prixAchatTtcUnitaire}</div>
                             <div className="article-cell">{article.coefficiantMagore}</div>
-                            <div className="article-cell">{article.prixVenteTtc}</div>
-                            
+                            <div className="article-cell">{article.prixVenteTtcUnitaire}</div>
                             <div className="article-cell">
-                                {editingPrice === article.codeArticle ? (
+                                {editingPrice === article.idArticle ? (
                                     <input
                                         type="number"
                                         step="0.01"
                                         value={tempPrice}
                                         onChange={(e) => setTempPrice(e.target.value)}
-                                        onKeyPress={(e) => handleKeyPress(e, article.codeArticle)}
-                                        onBlur={() => savePrice(article.codeArticle)}
+                                        onKeyPress={(e) => handleKeyPress(e, article.idArticle)}
+                                        onBlur={() => savePrice(article.idArticle)}
                                         className="price-input"
                                         autoFocus
                                     />
                                 ) : (
                                 <span 
                                     onClick={() => startEditing(article)}
-                                    className={`editable-price ${getPriceColor(article.prixVenteReel, article.prixVenteTtc)}`}
+                                    className={`editable-price ${getPriceColor(article.prixVenteReel, article.prixVenteTtcUnitaire)}`}
                                     title="Cliquer pour modifier"
                                 >
                                     {article.prixVenteReel || '0.00'}
@@ -287,7 +298,7 @@ export default function ArticlesList() {
                             <div className="article-cell no-print">
                                 <button
                                     className="delete-btn"
-                                    onClick={() => handleDelete(article.codeArticle)}
+                                    onClick={() => handleDelete(article.idArticle)}
                                     title="Supprimer"
                                 >
                                     <Trash2 className="w-6 h-6" />
