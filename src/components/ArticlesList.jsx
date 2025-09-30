@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import './ArticlesList.css'
-import { Trash2 } from 'lucide-react';
+import { Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 
 export default function ArticlesList() {
     const getPriceColor = (prixReel, prixConseil) => {
@@ -32,6 +32,7 @@ export default function ArticlesList() {
     const [search, setSearch] = useState('');
     const [editingPrice, setEditingPrice] = useState(null);
     const [tempPrice, setTempPrice] = useState('');
+    const [sortByDate, setSortByDate] = useState(null); // null, 'asc', 'desc'
 
     useEffect(() => {
         fetch('http://localhost:9090/api/article')
@@ -144,9 +145,33 @@ export default function ArticlesList() {
         }
     };
 
-    const filteredArticles = articles.filter(article =>
+    // Fonction de tri par date
+    const handleSortByDate = () => {
+        if (sortByDate === null || sortByDate === 'desc') {
+            setSortByDate('asc');
+        } else {
+            setSortByDate('desc');
+        }
+    };
+
+    // Filtrer et trier les articles
+    let filteredArticles = articles.filter(article =>
         article.nomArticle.toLowerCase().includes(search.toLowerCase())
     );
+
+    // Appliquer le tri par date si activé
+    if (sortByDate) {
+        filteredArticles = [...filteredArticles].sort((a, b) => {
+            const dateA = new Date(a.dateAchat || 0);
+            const dateB = new Date(b.dateAchat || 0);
+            
+            if (sortByDate === 'asc') {
+                return dateA - dateB;
+            } else {
+                return dateB - dateA;
+            }
+        });
+    }
 
     return (
         <div className="container">
@@ -167,36 +192,36 @@ export default function ArticlesList() {
                             <input name="nomFournisseur" placeholder="Fournisseur" value={form.nomFournisseur} onChange={handleChange} />
                         </div>
                         <div className="form-group">
-                            <label>Code Article</label>
-                            <input name="codeArticle" placeholder="Code" value={form.codeArticle} onChange={handleChange} />
+                            <label>Code article</label>
+                            <input name="codeArticle" placeholder="Code article" value={form.codeArticle} onChange={handleChange} />
                         </div>
                         <div className="form-group">
-                            <label>Nom Article</label>
-                            <input name="nomArticle" placeholder="Nom" value={form.nomArticle} onChange={handleChange} />
+                            <label>Désignation</label>
+                            <input name="nomArticle" placeholder="Désignation" value={form.nomArticle} onChange={handleChange} />
                         </div>
                         <div className="form-group">
                             <label>Quantité</label>
-                            <input name="quantite" type="number" placeholder="Quantite" value={form.quantite} onChange={handleChange} />
+                            <input name="quantite" type="number" placeholder="Quantité" value={form.quantite} onChange={handleChange} />
                         </div>
                         <div className="form-group">
-                            <label>Date Achat</label>
+                            <label>Date d'achat</label>
                             <input name="dateAchat" type="date" value={form.dateAchat} onChange={handleChange} />
                         </div>
                         <div className="form-group">
-                            <label>Prix Achat HT</label>
-                            <input name="prixAchatHt" type="number" step="0.01" placeholder="Prix HT" value={form.prixAchatHt} onChange={handleChange} />
+                            <label>Prix d'achat HT</label>
+                            <input name="prixAchatHt" type="number" step="0.01" placeholder="Prix d'achat HT" value={form.prixAchatHt} onChange={handleChange} />
                         </div>
                         <div className="form-group">
-                            <label>TVA Achat</label>
+                            <label>Taux de TVA achat</label>
                             <select name="tva" value={form.tva} onChange={handleChange}>
-                                <option value="">TVA</option>
+                                <option value="">TVA Achat</option>
                                 <option value="TVA_5_5">5.5%</option>
                                 <option value="TVA_10">10%</option>
                                 <option value="TVA_20">20%</option>
                             </select>
                         </div>
                         <div className="form-group">
-                            <label>TVA Vente</label>
+                            <label>Taux de TVA vente</label>
                             <select name="tvaVente" value={form.tvaVente} onChange={handleChange}>
                                 <option value="">TVA Vente</option>
                                 <option value="TVA_5_5">5.5%</option>
@@ -224,25 +249,34 @@ export default function ArticlesList() {
             <div className="table-wrapper">
                 <div className="articles-container">
                     <div className="article-row header">
-                        <div className="article-cell">Fournisseur</div>
-                        <div className="article-cell">Code</div>
-                        <div className="article-cell">Désignation</div>
-                        <div className="article-cell">Date d'achat</div>
-                        <div className="article-cell">Quantité</div>
-                        <div className="article-cell">Prix d'achat HT</div>
-                        <div className="article-cell">Prix d'achat HT Unitaire</div>
-                        <div className="article-cell">Taux de TVA</div>
-                        <div className="article-cell">Montant TVA</div>
-                        <div className="article-cell">Prix d'achat TTC</div>
-                        <div className="article-cell">Prix d'achat TTC unitaire</div>
-                        <div className="article-cell">Coefficient Magoré</div>
-
-                        <div className="article-cell">Prix de vente conseillé TTC Unitaire</div>
-
-                        <div className="article-cell">Prix de Vente Réel</div>
-                        <div className="article-cell">TVA Vente</div>
-                        <div className="article-cell no-print">Supprimer</div>
-                    </div>
+    <div className="article-cell">Fournisseur</div>
+    <div className="article-cell">Code article</div>
+    <div className="article-cell">Désignation</div>
+    <div className="article-cell">
+        <div className="date-sort-container">
+            <span>Date d'achat</span>
+            <button 
+                className="sort-button"
+                onClick={handleSortByDate}
+                title={`Trier par date ${sortByDate === 'asc' ? 'décroissante' : 'croissante'}`}
+            >
+                {sortByDate === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />}
+            </button>
+        </div>
+    </div>
+    <div className="article-cell">Quantité</div>
+    <div className="article-cell">Prix d'achat HT</div>
+    <div className="article-cell">Prix d'achat UHT</div>
+    <div className="article-cell">Taux de TVA</div>
+    <div className="article-cell">Montant TVA</div>
+    <div className="article-cell">Prix d'achat TTC</div>
+    <div className="article-cell">Prix d'achat UTTC</div>
+    <div className="article-cell">Coefficient majoré x3</div>
+    <div className="article-cell">Prix de vente conseillé UTTC</div>
+    <div className="article-cell">Prix de Vente Réel</div>
+    <div className="article-cell">TVA Vente</div>
+    <div className="article-cell no-print">Supprimer</div>
+</div>
                     
                     {filteredArticles.map(article => (
                         <div key={article.idArticle} className="article-row">

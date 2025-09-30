@@ -1,8 +1,6 @@
-/* ArticlesList.css */
-
-/* Styles normaux (écran) */
+/* Container global */
 .container {
-  max-width: 1400px;
+  max-width: 1800px; /* Augmenté de 1400px à 1800px */
   margin: 0 auto;
   padding: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -27,7 +25,6 @@ h1 {
   transition: background 0.3s;
   color: white;
 }
-
 .btn-print:hover {
   background: #2980b9;
 }
@@ -40,25 +37,21 @@ h1 {
   margin-bottom: 20px;
   border: 1px solid #dee2e6;
 }
-
 .form-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 15px;
   align-items: end;
 }
-
 .form-group {
   display: flex;
   flex-direction: column;
 }
-
 .form-group label {
   font-weight: 600;
   margin-bottom: 5px;
   color: #495057;
 }
-
 .form-group input,
 .form-group select {
   padding: 8px 12px;
@@ -66,14 +59,12 @@ h1 {
   border-radius: 4px;
   font-size: 14px;
 }
-
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
   border-color: #3498db;
   box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
-
 .btn-submit {
   background: #27ae60;
   color: white;
@@ -85,21 +76,18 @@ h1 {
   transition: background 0.3s;
   height: fit-content;
 }
-
 .btn-submit:hover {
   background: #219a52;
 }
 
-/* Barre de recherche */
+/* Recherche */
 .search-container {
   margin-bottom: 20px;
 }
-
 .search-container .relative {
   position: relative;
   max-width: 400px;
 }
-
 .search-container input {
   width: 100%;
   padding: 10px 10px 10px 35px;
@@ -107,7 +95,6 @@ h1 {
   border-radius: 4px;
   font-size: 14px;
 }
-
 .search-container span {
   position: absolute;
   left: 10px;
@@ -125,15 +112,14 @@ h1 {
 }
 
 .articles-container {
-  min-width: 1200px;
+  min-width: 1400px;
   display: grid;
 }
 
 .article-row {
   display: grid;
-  grid-template-columns: 1fr 0.8fr 2fr 1fr 1fr 0.8fr 1fr 1fr 1fr 1fr 1fr 0.8fr 0.5fr ;
-  gap: 1px;
-  background-color: #f8f9fa;
+  /* Colonne Désignation agrandie : 1.5fr au lieu de 1fr */
+  grid-template-columns: 1fr 0.8fr 1.5fr 1fr 1fr 0.8fr 1fr 1fr 1fr 1.5fr 1fr 0.8fr 0.5fr;
 }
 
 .article-row.header {
@@ -147,12 +133,32 @@ h1 {
   background: white;
   display: flex;
   align-items: center;
+  justify-content: center;
   min-height: 50px;
+  text-align: center;
+  word-wrap: break-word; /* Permet de casser les mots longs */
+  overflow-wrap: break-word; /* Alternative pour la césure */
+}
+
+.article-cell:nth-child(3) { 
+  justify-content: center; 
+  text-align: center;
+  min-width: 250px; 
+}
+
+.article-cell:nth-child(13) { 
+  justify-content: center; 
+  text-align: center;
+  min-width: 150px; 
 }
 
 .article-row.header .article-cell {
   background: #2c3e50;
   font-size: 14px;
+  font-weight: 600;
+  color: white;
+  justify-content: center;
+
 }
 
 /* Prix éditable */
@@ -163,12 +169,10 @@ h1 {
   transition: background-color 0.2s;
   border: 1px dashed transparent;
 }
-
 .editable-price:hover {
   background-color: #f8f9fa;
   border-color: #3498db;
 }
-
 .price-input {
   width: 100%;
   padding: 4px;
@@ -177,30 +181,27 @@ h1 {
   font-size: inherit;
   box-sizing: border-box;
 }
-
 .price-input:focus {
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
-/* Classes de couleur pour les prix */
+/* Couleurs prix */
 .text-red-500 {
   color: #e74c3c;
   font-weight: 600;
 }
-
 .text-green-500 {
   color: #27ae60;
   font-weight: 600;
 }
-
-.text-black-500 {
+.text-black {
   color: #2c3e50;
   font-weight: 600;
 }
 
-/* Bouton Supprimer */
+/* Supprimer */
 .delete-btn {
   background: #e74c3c;
   color: white;
@@ -214,91 +215,116 @@ h1 {
   width: 40px;
   height: 40px;
 }
-
 .delete-btn:hover {
   background: #c0392b;
 }
 
-/* Styles d'impression */
+/* Impression */
 @media print {
   .no-print {
     display: none !important;
   }
-
   @page {
     size: A4 portrait;
     margin: 10mm;
   }
-
   body {
     font-size: 10px;
   }
-
   .container {
     padding: 0;
     margin: 0;
     width: 100%;
   }
-
   .articles-container {
     display: table !important;
     width: 100% !important;
-    table-layout: fixed;
     border-collapse: collapse;
     font-size: 9px;
-    min-width: auto !important;
   }
-
   .article-row {
     display: table-row !important;
     page-break-inside: avoid;
-    break-inside: avoid;
   }
-
   .article-row.header {
-    font-weight: bold;
     background: #f0f0f0 !important;
   }
-
   .article-cell {
     display: table-cell !important;
     padding: 2px 4px !important;
     border: 1px solid #ccc !important;
     word-break: break-word;
-    white-space: normal;
+    text-align: center; /* centrage aussi en impression */
     background: white !important;
     color: black !important;
   }
-
   .article-row.header .article-cell {
     background: #f0f0f0 !important;
     color: black !important;
     font-weight: bold;
   }
-
-  /* Masquer les éléments interactifs à l'impression */
   .editable-price {
-    cursor: default !important;
     border: none !important;
     background: transparent !important;
   }
-
   .price-input {
     display: none !important;
   }
 }
 
 /* Responsive */
+/* Responsive */
 @media (max-width: 768px) {
   .container {
     padding: 10px;
   }
-  
   .form-row {
     grid-template-columns: 1fr;
   }
-  
   h1 {
     font-size: 1.5rem;
   }
+  .articles-container {
+    min-width: 1000px; /* Ajusté pour mobile */
+  }
+}
+
+/* Pour les très grands écrans */
+@media (min-width: 1920px) {
+  .container {
+    max-width: 95%; /* Utilise plus d'espace sur les grands écrans */
+  }
+}
+
+/* Styles pour le tri par date */
+.date-sort-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.sort-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    color: white;
+    background-color: #007bff;
+}
+
+.sort-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.article-row.header .article-cell {
+    white-space: normal;
+    line-height: 1.3;
 }
