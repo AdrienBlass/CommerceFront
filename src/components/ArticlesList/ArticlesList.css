@@ -220,56 +220,126 @@ h1 {
 }
 
 /* Impression */
+/* Styles d'impression améliorés */
 @media print {
   .no-print {
     display: none !important;
   }
+  
   @page {
-    size: A4 portrait;
-    margin: 10mm;
+    size: A4 landscape; /* Mode paysage pour plus d'espace */
+    margin: 5mm;
   }
+  
   body {
-    font-size: 10px;
+    font-size: 8px; /* Taille de police réduite */
+    line-height: 1.2;
+    -webkit-print-color-adjust: exact;
   }
+  
   .container {
     padding: 0;
     margin: 0;
     width: 100%;
+    max-width: 100%;
   }
+  
+  h1 {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 5px;
+  }
+  
+  .table-wrapper {
+    overflow: visible;
+    border: none;
+  }
+  
   .articles-container {
     display: table !important;
     width: 100% !important;
     border-collapse: collapse;
-    font-size: 9px;
+    font-size: 7px;
+    page-break-inside: auto;
   }
+  
   .article-row {
     display: table-row !important;
     page-break-inside: avoid;
+    page-break-after: auto;
   }
+  
   .article-row.header {
     background: #f0f0f0 !important;
+    -webkit-print-color-adjust: exact;
   }
+  
   .article-cell {
     display: table-cell !important;
-    padding: 2px 4px !important;
+    padding: 2px 3px !important;
     border: 1px solid #ccc !important;
     word-break: break-word;
-    text-align: center; /* centrage aussi en impression */
+    text-align: center;
     background: white !important;
     color: black !important;
+    vertical-align: middle;
+    min-height: auto !important;
   }
+  
   .article-row.header .article-cell {
-    background: #f0f0f0 !important;
-    color: black !important;
+    background: #2c3e50 !important;
+    color: white !important;
     font-weight: bold;
+    -webkit-print-color-adjust: exact;
   }
+  
   .editable-price {
     border: none !important;
     background: transparent !important;
   }
+  
   .price-input {
     display: none !important;
   }
+  
+  /* Masquer la colonne Supprimer */
+  .article-cell:nth-child(16) {
+    display: none !important;
+  }
+  
+  /* Assurer que les couleurs de prix s'impriment */
+  .text-red-500 {
+    color: #e74c3c !important;
+    font-weight: 600;
+  }
+  .text-green-500 {
+    color: #27ae60 !important;
+    font-weight: 600;
+  }
+  .text-black {
+    color: #2c3e50 !important;
+    font-weight: 600;
+  }
+}
+
+/* Amélioration du tri par date pour l'impression */
+.date-sort-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.sort-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Responsive */
@@ -297,14 +367,7 @@ h1 {
 }
 
 /* Styles pour le tri par date */
-.date-sort-container {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-}
+
 
 .sort-button {
     background: transparent;

@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { useState } from "react";
 import Navigation from "./components/Navigation";
-import ArticlesList from "./components/ArticlesList";
+import ArticlesList from "./components/ArticlesList/ArticlesList";
 import './index.css'
 
 const App = () => {
