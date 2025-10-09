@@ -30,6 +30,12 @@ export default function ArticlesList() {
   const [editingPrice, setEditingPrice] = useState(null);
   const [tempPrice, setTempPrice] = useState('');
   const [sortByDate, setSortByDate] = useState(null);
+  
+  // Nouveaux states pour l'édition de la désignation et du code article
+  const [editingDesignation, setEditingDesignation] = useState(null);
+  const [tempDesignation, setTempDesignation] = useState('');
+  const [editingCode, setEditingCode] = useState(null);
+  const [tempCode, setTempCode] = useState('');
 
   useEffect(() => {
     loadArticles();
@@ -45,7 +51,11 @@ export default function ArticlesList() {
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm(prev => ({ 
+      ...prev, 
+      [name]: value 
+    }));
   };
 
   const handleCreate = async (e) => {
@@ -54,7 +64,7 @@ export default function ArticlesList() {
     const errors = validateArticleForm(form);
     if (errors.length > 0) {
       alert(errors.join('\n'));
-      return;
+      return; // On retourne simplement sans bloquer le formulaire
     }
 
     try {
@@ -66,19 +76,7 @@ export default function ArticlesList() {
     }
   };
 
-  const handleDelete = async (idArticle) => {
-    if (!window.confirm("Êtes-vous sûr de vouloir supprimer cet article ?")) {
-      return;
-    }
-
-    try {
-      await deleteArticle(idArticle);
-      setArticles(prev => prev.filter(a => a.idArticle !== idArticle));
-    } catch (error) {
-      alert("Erreur lors de la suppression de l'article");
-    }
-  };
-
+  // Fonctions pour l'édition du prix (existantes)
   const startEditing = (article) => {
     setEditingPrice(article.idArticle);
     setTempPrice(article.prixVenteReel || '');
@@ -117,6 +115,84 @@ export default function ArticlesList() {
     }
   };
 
+  // Fonctions pour l'édition de la désignation
+  const startEditingDesignation = (article) => {
+    setEditingDesignation(article.idArticle);
+    setTempDesignation(article.nomArticle || '');
+  };
+
+  const saveDesignation = async (idArticle) => {
+    try {
+      const articleToUpdate = articles.find(a => a.idArticle === idArticle);
+      if (!articleToUpdate) return;
+
+      const updatedArticle = {
+        ...articleToUpdate,
+        nomArticle: tempDesignation
+      };
+
+      await updateArticle(idArticle, updatedArticle);
+      await loadArticles();
+      
+      setEditingDesignation(null);
+      setTempDesignation('');
+    } catch (error) {
+      alert("Erreur lors de la mise à jour de la désignation");
+    }
+  };
+
+  const cancelEditingDesignation = () => {
+    setEditingDesignation(null);
+    setTempDesignation('');
+  };
+
+  const handleKeyPressDesignation = (e, idArticle) => {
+    if (e.key === 'Enter') {
+      saveDesignation(idArticle);
+    } else if (e.key === 'Escape') {
+      cancelEditingDesignation();
+    }
+  };
+
+  // Fonctions pour l'édition du code article
+  const startEditingCode = (article) => {
+    setEditingCode(article.idArticle);
+    setTempCode(article.codeArticle || '');
+  };
+
+  const saveCode = async (idArticle) => {
+    try {
+      const articleToUpdate = articles.find(a => a.idArticle === idArticle);
+      if (!articleToUpdate) return;
+
+      const updatedArticle = {
+        ...articleToUpdate,
+        codeArticle: tempCode
+      };
+
+      await updateArticle(idArticle, updatedArticle);
+      await loadArticles();
+      
+      setEditingCode(null);
+      setTempCode('');
+    } catch (error) {
+      alert("Erreur lors de la mise à jour du code article");
+    }
+  };
+
+  const cancelEditingCode = () => {
+    setEditingCode(null);
+    setTempCode('');
+  };
+
+  const handleKeyPressCode = (e, idArticle) => {
+    if (e.key === 'Enter') {
+      saveCode(idArticle);
+    } else if (e.key === 'Escape') {
+      cancelEditingCode();
+    }
+  };
+
   const handleSortByDate = () => {
     setSortByDate(sortByDate === 'asc' ? 'desc' : 'asc');
   };
@@ -125,7 +201,7 @@ export default function ArticlesList() {
   let filteredArticles = filterArticles(articles, search);
   filteredArticles = sortArticlesByDate(filteredArticles, sortByDate);
 
-  return (
+   return (
     <div className="container">
       <div className="header-container">
         <h1>Liste des articles</h1>
@@ -143,32 +219,72 @@ export default function ArticlesList() {
           <div className="form-row">
             <div className="form-group">
               <label>Fournisseur</label>
-              <input name="nomFournisseur" placeholder="Fournisseur" value={form.nomFournisseur} onChange={handleChange} />
+              <input 
+                name="nomFournisseur" 
+                placeholder="Fournisseur" 
+                value={form.nomFournisseur} 
+                onChange={handleChange} 
+                required
+              />
             </div>
             <div className="form-group">
               <label>Code article</label>
-              <input name="codeArticle" placeholder="Code article" value={form.codeArticle} onChange={handleChange} />
+              <input 
+                name="codeArticle" 
+                placeholder="Code article" 
+                value={form.codeArticle} 
+                onChange={handleChange} 
+                required
+              />
             </div>
             <div className="form-group">
               <label>Désignation</label>
-              <input name="nomArticle" placeholder="Désignation" value={form.nomArticle} onChange={handleChange} />
+              <input 
+                name="nomArticle" 
+                placeholder="Désignation" 
+                value={form.nomArticle} 
+                onChange={handleChange} 
+                required
+              />
             </div>
             <div className="form-group">
               <label>Quantité</label>
-              <input name="quantite" type="number" placeholder="Quantité" value={form.quantite} onChange={handleChange} />
+              <input 
+                name="quantite" 
+                type="number" 
+                placeholder="Quantité" 
+                value={form.quantite} 
+                onChange={handleChange} 
+                min="1"
+                required
+              />
             </div>
             <div className="form-group">
               <label>Date d'achat</label>
-              <input name="dateAchat" type="date" value={form.dateAchat} onChange={handleChange} />
+              <input 
+                name="dateAchat" 
+                type="date" 
+                value={form.dateAchat} 
+                onChange={handleChange} 
+              />
             </div>
             <div className="form-group">
               <label>Prix d'achat HT</label>
-              <input name="prixAchatHt" type="number" step="0.01" placeholder="Prix d'achat HT" value={form.prixAchatHt} onChange={handleChange} />
+              <input 
+                name="prixAchatHt" 
+                type="number" 
+                step="0.01" 
+                placeholder="Prix d'achat HT" 
+                value={form.prixAchatHt} 
+                onChange={handleChange} 
+                min="0"
+                required
+              />
             </div>
             <div className="form-group">
               <label>Taux de TVA achat</label>
-              <select name="tva" value={form.tva} onChange={handleChange}>
-                <option value="">TVA Achat</option>
+              <select name="tva" value={form.tva} onChange={handleChange} required>
+                <option value="">Taux de TVA Achat</option>
                 <option value="TVA_5_5">5.5%</option>
                 <option value="TVA_10">10%</option>
                 <option value="TVA_20">20%</option>
@@ -176,8 +292,8 @@ export default function ArticlesList() {
             </div>
             <div className="form-group">
               <label>Taux de TVA vente</label>
-              <select name="tvaVente" value={form.tvaVente} onChange={handleChange}>
-                <option value="">TVA Vente</option>
+              <select name="tvaVente" value={form.tvaVente} onChange={handleChange} required>
+                <option value="">Taux de TVA Vente</option>
                 <option value="TVA_5_5">5.5%</option>
                 <option value="TVA_10">10%</option>
                 <option value="TVA_20">20%</option>
@@ -235,8 +351,53 @@ export default function ArticlesList() {
           {filteredArticles.map(article => (
             <div key={article.idArticle} className="article-row">
               <div className="article-cell">{article.nomFournisseur}</div>
-              <div className="article-cell">{article.codeArticle}</div>
-              <div className="article-cell">{article.nomArticle}</div>
+              
+              {/* Code article éditable */}
+              <div className="article-cell">
+                {editingCode === article.idArticle ? (
+                  <input
+                    type="text"
+                    value={tempCode}
+                    onChange={(e) => setTempCode(e.target.value)}
+                    onKeyPress={(e) => handleKeyPressCode(e, article.idArticle)}
+                    onBlur={() => saveCode(article.idArticle)}
+                    className="editable-input"
+                    autoFocus
+                  />
+                ) : (
+                  <span 
+                    onClick={() => startEditingCode(article)}
+                    className="editable-field"
+                    title="Cliquer pour modifier"
+                  >
+                    {article.codeArticle}
+                  </span>
+                )}
+              </div>
+              
+              {/* Désignation éditable */}
+              <div className="article-cell">
+                {editingDesignation === article.idArticle ? (
+                  <input
+                    type="text"
+                    value={tempDesignation}
+                    onChange={(e) => setTempDesignation(e.target.value)}
+                    onKeyPress={(e) => handleKeyPressDesignation(e, article.idArticle)}
+                    onBlur={() => saveDesignation(article.idArticle)}
+                    className="editable-input"
+                    autoFocus
+                  />
+                ) : (
+                  <span 
+                    onClick={() => startEditingDesignation(article)}
+                    className="editable-field"
+                    title="Cliquer pour modifier"
+                  >
+                    {article.nomArticle}
+                  </span>
+                )}
+              </div>
+              
               <div className="article-cell">
                 {article.dateAchat ? new Date(article.dateAchat).toLocaleDateString() : ''}
               </div>
@@ -254,6 +415,8 @@ export default function ArticlesList() {
               <div className="article-cell">{article.prixAchatTtcUnitaire}</div>
               <div className="article-cell">{article.coefficiantMagore}</div>
               <div className="article-cell">{article.prixVenteTtcUnitaire}</div>
+              
+              {/* Prix de vente réel (existant) */}
               <div className="article-cell">
                 {editingPrice === article.idArticle ? (
                   <input

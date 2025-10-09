@@ -25,8 +25,32 @@ export const filterArticles = (articles, searchTerm) => {
 export const validateArticleForm = (formData) => {
   const errors = [];
   
+  if (!formData.nomFournisseur?.trim()) {
+    errors.push("Le nom du fournisseur est obligatoire");
+  }
+  
   if (!formData.codeArticle?.trim()) {
     errors.push("Le code article est obligatoire");
+  }
+  
+  if (!formData.nomArticle?.trim()) {
+    errors.push("La désignation est obligatoire");
+  }
+  
+  if (!formData.quantite || formData.quantite <= 0) {
+    errors.push("La quantité doit être supérieure à 0");
+  }
+  
+  if (!formData.prixAchatHt || formData.prixAchatHt <= 0) {
+    errors.push("Le prix d'achat HT doit être supérieur à 0");
+  }
+  
+  if (!formData.tva) {
+    errors.push("Le taux de TVA achat est obligatoire");
+  }
+  
+  if (!formData.tvaVente) {
+    errors.push("Le taux de TVA vente est obligatoire");
   }
   
   return errors;
