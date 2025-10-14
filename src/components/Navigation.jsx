@@ -13,10 +13,10 @@ export default function Navigation({ currentPage, onPageChange }) {
           Liste Articles
         </button>
         <button 
-          onClick={() => handleNavigation('fournisseurs')}
-          className={`nav-link ${currentPage === 'fournisseurs' ? 'active' : ''}`}
+          onClick={() => handleNavigation('composition')}
+          className={`nav-link ${currentPage === 'composition' ? 'active' : ''}`}
         >
-          Fournisseurs
+          Compositions
         </button>
       </div>
     </nav>

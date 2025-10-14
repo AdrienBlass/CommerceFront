@@ -1,0 +1,837 @@
+/* Composition.css - AVEC PRÉFIXES POUR ÉVITER LES CONFLITS */
+
+/* Container global spécifique à Composition */
+.composition-page .composition-container {
+  max-width: 1800px; /* Augmenté pour accommoder plus de colonnes */
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.composition-title {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+
+/* Header container */
+.composition-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Formulaire - styles inchangés */
+.composition-form-container {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #dee2e6;
+}
+
+.composition-form-main {
+  display: flex;
+  gap: 20px;
+  align-items: end;
+  margin-bottom: 20px;
+}
+
+.composition-form-main .composition-form-group {
+  flex: 1;
+}
+
+.composition-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.composition-form-group label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #495057;
+}
+
+.composition-form-group input,
+.composition-form-group select,
+.composition-form-group textarea {
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.composition-form-group input:focus,
+.composition-form-group select:focus,
+.composition-form-group textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.composition-btn-submit {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+  height: fit-content;
+}
+
+.composition-btn-submit:hover:not(:disabled) {
+  background: #219a52;
+}
+
+.composition-btn-submit:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Section des ingrédients - styles inchangés */
+.composition-ingredients-section {
+  margin-bottom: 20px;
+}
+
+.composition-ingredients-section h3 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+  font-size: 16px;
+}
+
+/* Container du menu déroulant - styles inchangés */
+.composition-dropdown-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.composition-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.composition-dropdown-header:hover {
+  border-color: #3498db;
+}
+
+.composition-dropdown-placeholder {
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.composition-dropdown-arrow {
+  color: #6c757d;
+  font-size: 12px;
+}
+
+.composition-dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 2px solid #3498db;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 400px;
+  overflow: hidden;
+}
+
+/* Barre de recherche - styles inchangés */
+.composition-search-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+.composition-search-input-container svg {
+  position: absolute;
+  left: 20px;
+  color: #6c757d;
+}
+
+.composition-search-input {
+  width: 100%;
+  padding: 8px 8px 8px 32px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.composition-search-clear {
+  position: absolute;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.composition-search-clear:hover {
+  color: #e74c3c;
+}
+
+/* Liste des articles - styles inchangés */
+.composition-dropdown-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.composition-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f8f9fa;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.composition-dropdown-item:hover {
+  background: #f8f9fa;
+}
+
+.composition-dropdown-item.selected {
+  background: #e8f5e8;
+  border-left: 3px solid #27ae60;
+}
+
+.composition-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.composition-article-info {
+  flex: 1;
+}
+
+.composition-article-name {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.composition-article-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.composition-article-code {
+  font-family: 'Courier New', monospace;
+}
+
+.composition-article-price {
+  font-weight: 600;
+  font-size: larger;
+  color: #27ae60;
+}
+
+.composition-no-results {
+  padding: 20px;
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Résumé des ingrédients sélectionnés - styles inchangés */
+.composition-selected-summary {
+  padding: 15px;
+  background: #e8f5e8;
+  border-radius: 6px;
+  border: 1px solid #d4edda;
+}
+
+.composition-selected-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.composition-selected-header h4 {
+  margin: 0;
+  color: #155724;
+  font-size: 16px;
+}
+
+.composition-clear-all {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.3s;
+}
+
+.composition-clear-all:hover {
+  background: #c0392b;
+}
+
+.composition-selected-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.composition-selected-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid #c3e6cb;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.composition-selected-name {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.composition-selected-price {
+  font-weight: 600;
+  color: #28a745;
+}
+
+.composition-remove-selected {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+.composition-remove-selected:hover {
+  background: #c0392b;
+}
+
+/* Coût total - styles inchangés */
+.composition-total-cost {
+  display: flex;
+  gap: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #c3e6cb;
+}
+
+.composition-cost-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.composition-cost-item strong {
+  font-size: 14px;
+  color: #155724;
+}
+
+.composition-cost-item span {
+  font-size: 16px;
+  font-weight: 600;
+  color: #28a745;
+}
+
+/* Recherche des compositions - styles inchangés */
+.composition-search-container {
+  margin-bottom: 20px;
+}
+
+.composition-search-relative {
+  position: relative;
+  max-width: 400px;
+}
+
+.composition-search-container input {
+  width: 100%;
+  padding: 10px 10px 10px 35px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.composition-search-container span {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+/* ========== TABLEAU DES COMPOSITIONS MODIFIÉ ========== */
+.composition-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.composition-compositions-container {
+  min-width: 1200px; /* Augmenté pour les nouvelles colonnes */
+  display: grid;
+}
+
+/* Nouvelle grille avec 7 colonnes */
+.composition-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1.5fr 0.8fr;
+  min-height: 50px;
+}
+
+.composition-row.composition-header {
+  background: #2c3e50;
+  color: white;
+  font-weight: 600;
+}
+
+.composition-cell {
+  padding: 12px 8px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  border-bottom: 1px solid #e9ecef;
+  position: relative;
+}
+
+.composition-row.composition-header .composition-cell {
+  background: #2c3e50;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  justify-content: center;
+}
+
+/* Styles pour les cellules spécifiques */
+.composition-cell:first-child {
+  justify-content: center;
+  text-align: center;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.composition-cell.composition-actions {
+  gap: 8px;
+  justify-content: center;
+}
+
+/* Cellule ingrédients avec tooltip */
+.composition-ingredients-cell {
+  position: relative;
+  cursor: pointer;
+}
+
+.composition-ingredients-trigger {
+  padding: 6px 12px;
+  background: #3498db;
+  color: white;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.composition-ingredients-cell:hover .composition-ingredients-trigger {
+  background: #2980b9;
+  transform: scale(1.05);
+}
+
+.composition-ingredients-tooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: white;
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  z-index: 1000;
+  min-width: 300px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.composition-ingredients-cell:hover .composition-ingredients-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(5px);
+}
+
+.composition-ingredients-list-tooltip {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.composition-ingredient-tooltip-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.composition-ingredient-tooltip-item:last-child {
+  border-bottom: none;
+}
+
+.composition-ingredient-name {
+  font-weight: 500;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+.composition-ingredient-price {
+  font-weight: 600;
+  color: #27ae60;
+  font-size: 12px;
+}
+
+/* Champs éditables */
+.composition-editable-field {
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100%;
+  border: 1px dashed transparent;
+  text-align: center;
+}
+
+.composition-editable-field:hover {
+  background-color: #f8f9fa;
+  border-color: #3498db;
+}
+
+.composition-editable-input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 2px solid #3498db;
+  border-radius: 4px;
+  font-size: inherit;
+  font-family: inherit;
+  background-color: white;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.composition-editable-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Boutons d'action */
+.composition-edit-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+.composition-edit-btn:hover {
+  background: #2980b9;
+}
+
+.composition-delete-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+.composition-delete-btn:hover {
+  background: #c0392b;
+}
+
+/* Styles pour les prix */
+.composition-cell:nth-child(2),
+.composition-cell:nth-child(3),
+.composition-cell:nth-child(4),
+.composition-cell:nth-child(5) {
+  font-weight: 600;
+  color: #2c3e50;
+  font-family: 'Courier New', monospace;
+}
+
+/* Scrollbar personnalisée */
+.composition-dropdown-list::-webkit-scrollbar,
+.composition-ingredients-list-tooltip::-webkit-scrollbar {
+  width: 6px;
+}
+
+.composition-dropdown-list::-webkit-scrollbar-track,
+.composition-ingredients-list-tooltip::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.composition-dropdown-list::-webkit-scrollbar-thumb,
+.composition-ingredients-list-tooltip::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.composition-dropdown-list::-webkit-scrollbar-thumb:hover,
+.composition-ingredients-list-tooltip::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Impression */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  @page {
+    size: A4 landscape;
+    margin: 5mm;
+  }
+  
+  body {
+    font-size: 10px;
+    line-height: 1.2;
+    -webkit-print-color-adjust: exact;
+  }
+  
+  .composition-page .composition-container {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .composition-title {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 5px;
+  }
+  
+  .composition-table-wrapper {
+    overflow: visible;
+    border: none;
+  }
+  
+  .composition-compositions-container {
+    display: table !important;
+    width: 100% !important;
+    border-collapse: collapse;
+    font-size: 9px;
+    page-break-inside: auto;
+  }
+  
+  .composition-row {
+    display: table-row !important;
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  
+  .composition-row.composition-header {
+    background: #f0f0f0 !important;
+    -webkit-print-color-adjust: exact;
+  }
+  
+  .composition-cell {
+    display: table-cell !important;
+    padding: 4px 6px !important;
+    border: 1px solid #ccc !important;
+    word-break: break-word;
+    text-align: center;
+    background: white !important;
+    color: black !important;
+    vertical-align: middle;
+    min-height: auto !important;
+  }
+  
+  .composition-row.composition-header .composition-cell {
+    background: #2c3e50 !important;
+    color: white !important;
+    font-weight: bold;
+    -webkit-print-color-adjust: exact;
+  }
+  
+  .composition-editable-field {
+    border: none !important;
+    background: transparent !important;
+  }
+  
+  .composition-editable-input {
+    display: none !important;
+  }
+  
+  /* Masquer la colonne Actions */
+  .composition-cell.composition-actions {
+    display: none !important;
+  }
+  
+  .composition-cell:first-child {
+    text-align: left;
+    padding-left: 8px !important;
+  }
+  
+  /* Masquer le tooltip en impression */
+  .composition-ingredients-tooltip {
+    display: none !important;
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .composition-page .composition-container {
+    padding: 15px;
+  }
+  
+  .composition-compositions-container {
+    min-width: 1000px;
+  }
+}
+
+@media (max-width: 768px) {
+  .composition-page .composition-container {
+    padding: 10px;
+  }
+  
+  .composition-header-container {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+  
+  .composition-form-main {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .composition-title {
+    font-size: 1.5rem;
+  }
+  
+  .composition-compositions-container {
+    min-width: 800px;
+  }
+  
+  .composition-selected-list {
+    flex-direction: column;
+  }
+  
+  .composition-selected-item {
+    width: 100%;
+  }
+  
+  .composition-total-cost {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .composition-form-container {
+    padding: 15px;
+  }
+  
+  .composition-row {
+    grid-template-columns: 1.2fr 0.8fr 0.8fr 0.8fr 0.8fr 1.2fr 0.6fr;
+  }
+  
+  .composition-cell {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+  
+  .composition-ingredients-tooltip {
+    min-width: 250px;
+    left: 10px;
+    transform: translateX(0) translateY(10px);
+  }
+  
+  .composition-ingredients-cell:hover .composition-ingredients-tooltip {
+    transform: translateX(0) translateY(5px);
+  }
+  
+  .composition-dropdown-content {
+    position: fixed;
+    top: 50%;
+    left: 10px;
+    right: 10px;
+    transform: translateY(-50%);
+    max-height: 70vh;
+  }
+}
+
+/* Pour les très grands écrans */
+@media (min-width: 1920px) {
+  .composition-page .composition-container {
+    max-width: 95%;
+  }
+}
+
+/* États de survie pour les lignes */
+.composition-row:not(.composition-header):hover {
+  background-color: #f8f9fa;
+}
+
+/* Animation pour les modifications */
+@keyframes composition-highlight {
+  0% { background-color: #fff3cd; }
+  100% { background-color: white; }
+}
+
+.composition-row.composition-highlight {
+  animation: composition-highlight 1s ease-in-out;
+}

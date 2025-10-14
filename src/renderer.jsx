@@ -3,6 +3,7 @@ import { useState } from "react";
 import Navigation from "./components/Navigation";
 import ArticlesList from "./components/ArticlesList/ArticlesList";
 import './index.css'
+import Composition from "./components/Compositions/Composition";
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('articles');
@@ -11,8 +12,8 @@ const App = () => {
     switch(currentPage) {
       case 'articles':
         return <ArticlesList />;
-      case 'fournisseurs':
-        return <div>Page Fournisseurs - En construction</div>;
+      case 'composition':
+        return <Composition />;
       default:
         return <ArticlesList />;
     }
