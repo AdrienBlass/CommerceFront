@@ -50,6 +50,16 @@ export default function ArticlesList() {
     }
   };
 
+  const handleDelete = async (idArticle) => {
+  if (window.confirm("Êtes-vous sûr de vouloir supprimer cet article ?")) {
+    try {
+      await deleteArticle(idArticle);
+      await loadArticles(); // Recharger les articles après suppression
+    } catch (error) {
+      alert("Erreur lors de la suppression de l'article");
+    }
+  }
+};
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(prev => ({ 

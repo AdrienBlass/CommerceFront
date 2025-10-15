@@ -835,3 +835,244 @@
 .composition-row.composition-highlight {
   animation: composition-highlight 1s ease-in-out;
 }
+/* Style pour le compteur d'ingrédients */
+.composition-ingredients-count {
+  padding: 6px 12px;
+  background: #3498db;
+  color: white;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+}
+
+.composition-ingredients-count:hover {
+  background: #2980b9;
+  transform: scale(1.05);
+}
+
+/* OVERLAY/POPUP FIXED - S'affiche par dessus tout */
+.composition-ingredients-overlay {
+  position: fixed;
+  transform: translateX(-50%);
+  background: white;
+  border: 2px solid #3498db;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  min-width: 320px;
+  max-width: 400px;
+  animation: composition-fadeIn 0.2s ease-out;
+}
+
+@keyframes composition-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Flèche de la popup */
+.composition-ingredients-overlay::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-left: 2px solid #3498db;
+  border-top: 2px solid #3498db;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.composition-overlay-content {
+  position: relative;
+  z-index: 2;
+  background: white;
+  border-radius: 10px;
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.composition-overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #3498db;
+  color: white;
+  border-radius: 10px 10px 0 0;
+}
+
+.composition-overlay-header h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.composition-overlay-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+  margin-left: 10px;
+}
+
+.composition-overlay-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.composition-overlay-list {
+  flex: 1;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+.composition-overlay-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s;
+}
+
+.composition-overlay-item:hover {
+  background-color: #f8f9fa;
+}
+
+.composition-overlay-item:last-child {
+  border-bottom: none;
+}
+
+.composition-overlay-index {
+  font-weight: 600;
+  color: #3498db;
+  margin-right: 8px;
+  min-width: 20px;
+}
+
+.composition-overlay-name {
+  font-weight: 500;
+  color: #2c3e50;
+  font-size: 13px;
+  flex: 1;
+  margin-right: 10px;
+}
+
+.composition-overlay-price {
+  font-weight: 600;
+  color: #27ae60;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.composition-overlay-footer {
+  padding: 12px 20px;
+  background: #f8f9fa;
+  border-radius: 0 0 10px 10px;
+  border-top: 1px solid #e9ecef;
+}
+
+.composition-overlay-total {
+  font-size: 12px;
+  color: #6c757d;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Scrollbar pour l'overlay */
+.composition-overlay-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.composition-overlay-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.composition-overlay-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.composition-overlay-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Assurer que l'overlay soit au-dessus de tout */
+.composition-ingredients-overlay {
+  z-index: 10000;
+}
+
+
+/* Styles pour les prix éditables */
+.composition-editable-price {
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  border: 1px dashed transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100%;
+}
+
+.composition-editable-price:hover {
+  background-color: #f8f9fa;
+  border-color: #3498db;
+}
+
+.composition-price-input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 2px solid #3498db;
+  border-radius: 4px;
+  font-size: inherit;
+  font-family: inherit;
+  background-color: white;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.composition-price-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Couleurs pour les prix */
+.text-red-500 {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.text-green-500 {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.text-black {
+  color: #2c3e50;
+  font-weight: 600;
+}

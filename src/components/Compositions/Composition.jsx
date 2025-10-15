@@ -28,21 +28,98 @@ export default function Composition() {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [ingredientSearch, setIngredientSearch] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [hoveredComposition, setHoveredComposition] = useState(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [editingPrice, setEditingPrice] = useState(null);
+  const [tempPrice, setTempPrice] = useState('');
 
   useEffect(() => {
     loadCompositions();
     loadArticles();
   }, []);
 
-  const loadCompositions = async () => {
-    try {
-      const data = await fetchCompositions();
-      setCompositions(data);
-    } catch (error) {
-      console.error('Erreur:', error);
-      alert("Erreur lors du chargement des compositions");
-    }
-  };
+  const startEditingPrice = (composition) => {
+  setEditingPrice(composition.idComposition);
+  setTempPrice(composition.prixVenteReel || '');
+};
+
+const savePrice = async (idComposition) => {
+  try {
+    const compositionToUpdate = compositions.find(c => c.idComposition === idComposition);
+    if (!compositionToUpdate) return;
+
+    const updatedComposition = {
+      ...compositionToUpdate,
+      prixVenteReel: parseFloat(tempPrice) || 0
+    };
+
+    await updateComposition(idComposition, updatedComposition);
+    await loadCompositions();
+    
+    setEditingPrice(null);
+    setTempPrice('');
+  } catch (error) {
+    console.error('Erreur:', error);
+    alert("Erreur lors de la mise à jour du prix");
+  }
+};
+
+const cancelEditingPrice = () => {
+  setEditingPrice(null);
+  setTempPrice('');
+};
+
+const handleKeyPressPrice = (e, idComposition) => {
+  if (e.key === 'Enter') {
+    savePrice(idComposition);
+  } else if (e.key === 'Escape') {
+    cancelEditingPrice();
+  }
+};
+
+// Fonction pour déterminer la couleur du prix
+const getPriceColor = (prixVenteReel, prixVenteConseille) => {
+  if (!prixVenteReel || prixVenteReel === 0) return 'text-black';
+  if (prixVenteReel < prixVenteConseille) return 'text-red-500';
+  if (prixVenteReel > prixVenteConseille) return 'text-green-500';
+  return 'text-black';
+};
+const loadCompositions = async () => {
+  try {
+    const data = await fetchCompositions();
+    
+    // Pour chaque composition, charger les détails des articles
+    const compositionsWithIngredients = await Promise.all(
+      data.map(async (composition) => {
+        if (composition.ingredientIds && composition.ingredientIds.length > 0) {
+          try {
+            const ingredients = await fetchArticlesByIds(composition.ingredientIds);
+            return {
+              ...composition,
+              ingredients: ingredients
+            };
+          } catch (error) {
+            console.error(`Erreur chargement ingrédients pour ${composition.nom}:`, error);
+            return {
+              ...composition,
+              ingredients: []
+            };
+          }
+        } else {
+          return {
+            ...composition,
+            ingredients: []
+          };
+        }
+      })
+    );
+    
+    setCompositions(compositionsWithIngredients);
+  } catch (error) {
+    console.error('Erreur:', error);
+    alert("Erreur lors du chargement des compositions");
+  }
+};
 
   const loadArticles = async () => {
     try {
@@ -355,7 +432,7 @@ export default function Composition() {
         </div>
 
         {/* Tableau des compositions */}
-               <div className="composition-table-wrapper">
+        <div className="composition-table-wrapper">
           <div className="composition-compositions-container">
             <div className="composition-row composition-header">
               <div className="composition-cell">Nom</div>
@@ -405,23 +482,43 @@ export default function Composition() {
                 
                 {/* Nouvelle colonne Prix de Vente Réel */}
                 <div className="composition-cell">
-                  {composition.prixVenteReel?.toFixed(2) || '0.00'} €
+                  {editingPrice === composition.idComposition ? (
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={tempPrice}
+                      onChange={(e) => setTempPrice(e.target.value)}
+                      onKeyPress={(e) => handleKeyPressPrice(e, composition.idComposition)}
+                      onBlur={() => savePrice(composition.idComposition)}
+                      className="composition-price-input"
+                      autoFocus
+                    />
+                  ) : (
+                    <span 
+                      onClick={() => startEditingPrice(composition)}
+                      className={`composition-editable-price ${getPriceColor(composition.prixVenteReel, composition.prixVenteUttcConseille)}`}
+                      title="Cliquer pour modifier"
+                    >
+                      {composition.prixVenteReel?.toFixed(2) || '0.00'} €
+                    </span>
+                  )}
                 </div>
                 
                 {/* Nouvelle colonne Ingrédients - version compacte */}
                 <div className="composition-cell composition-ingredients-cell">
-                  <div className="composition-ingredients-compact">
-                    {composition.ingredients?.slice(0, 2).map((ingredient, index) => (
-                      <span key={ingredient.idArticle} className="composition-ingredient-tag">
-                        {ingredient.nomArticle}
-                        {index < composition.ingredients.length - 1 && ', '}
-                      </span>
-                    ))}
-                    {composition.ingredients?.length > 2 && (
-                      <span className="composition-ingredients-more">
-                        +{composition.ingredients.length - 2} autres
-                      </span>
-                    )}
+                  <div 
+                    className="composition-ingredients-count"
+                    onMouseEnter={(e) => {
+                      const rect = e.target.getBoundingClientRect();
+                      setHoveredComposition(composition);
+                      setTooltipPosition({
+                        x: rect.left + rect.width / 2,
+                        y: rect.bottom + window.scrollY
+                      });
+                    }}
+                    onMouseLeave={() => setHoveredComposition(null)}
+                  >
+                    {composition.ingredients?.length || 0} ingrédient(s)
                   </div>
                 </div>
                 
@@ -438,6 +535,48 @@ export default function Composition() {
             ))}
           </div>
         </div>
+
+        {/* POPUP OVERLAY */}
+        {hoveredComposition && (
+          <div 
+            className="composition-ingredients-overlay"
+            style={{
+              left: `${tooltipPosition.x}px`,
+              top: `${tooltipPosition.y}px`,
+            }}
+            onMouseEnter={() => setHoveredComposition(hoveredComposition)}
+            onMouseLeave={() => setHoveredComposition(null)}
+          >
+            <div className="composition-overlay-content">
+              <div className="composition-overlay-header">
+                <h4>Ingrédients de "{hoveredComposition.nom}"</h4>
+                <button 
+                  className="composition-overlay-close"
+                  onClick={() => setHoveredComposition(null)}
+                >
+                  <X size={16} />
+                </button>
+              </div>
+              <div className="composition-overlay-list">
+                {hoveredComposition.ingredients?.map((ingredient, index) => (
+                  <div key={ingredient.idArticle} className="composition-overlay-item">
+                    <span className="composition-overlay-index">{index + 1}.</span>
+                    <span className="composition-overlay-name">{ingredient.nomArticle}</span>
+                    <span className="composition-overlay-price">
+                      {ingredient.prixAchatHtUnitaire?.toFixed(2)}€ HT
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="composition-overlay-footer">
+                <div className="composition-overlay-total">
+                  Total: {hoveredComposition.ingredients?.length} ingrédient(s)
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
       </div>
     </div>
   );
