@@ -39,87 +39,80 @@ export default function Composition() {
   }, []);
 
   const startEditingPrice = (composition) => {
-  setEditingPrice(composition.idComposition);
-  setTempPrice(composition.prixVenteReel || '');
-};
+    setEditingPrice(composition.idComposition);
+    setTempPrice(composition.prixVenteReel || '');
+  };
 
-const savePrice = async (idComposition) => {
-  try {
-    const compositionToUpdate = compositions.find(c => c.idComposition === idComposition);
-    if (!compositionToUpdate) return;
+  const savePrice = async (idComposition) => {
+    try {
+      const compositionToUpdate = compositions.find(c => c.idComposition === idComposition);
+      if (!compositionToUpdate) return;
 
-    const updatedComposition = {
-      ...compositionToUpdate,
-      prixVenteReel: parseFloat(tempPrice) || 0
-    };
+      const updatedComposition = {
+        ...compositionToUpdate,
+        prixVenteReel: parseFloat(tempPrice) || 0
+      };
 
-    await updateComposition(idComposition, updatedComposition);
-    await loadCompositions();
-    
+      await updateComposition(idComposition, updatedComposition);
+      await loadCompositions();
+      
+      setEditingPrice(null);
+      setTempPrice('');
+    } catch (error) {
+      console.error('Erreur:', error);
+      alert("Erreur lors de la mise à jour du prix");
+    }
+  };
+
+  const cancelEditingPrice = () => {
     setEditingPrice(null);
     setTempPrice('');
-  } catch (error) {
-    console.error('Erreur:', error);
-    alert("Erreur lors de la mise à jour du prix");
-  }
-};
+  };
 
-const cancelEditingPrice = () => {
-  setEditingPrice(null);
-  setTempPrice('');
-};
+  const handleKeyPressPrice = (e, idComposition) => {
+    if (e.key === 'Enter') {
+      savePrice(idComposition);
+    } else if (e.key === 'Escape') {
+      cancelEditingPrice();
+    }
+  };
 
-const handleKeyPressPrice = (e, idComposition) => {
-  if (e.key === 'Enter') {
-    savePrice(idComposition);
-  } else if (e.key === 'Escape') {
-    cancelEditingPrice();
-  }
-};
+  // Fonction pour déterminer la couleur du prix
+  const getPriceColor = (prixVenteReel, prixVenteConseille) => {
+    if (!prixVenteReel || prixVenteReel === 0) return 'text-black';
+    if (prixVenteReel < prixVenteConseille) return 'text-red-500';
+    if (prixVenteReel > prixVenteConseille) return 'text-green-500';
+    return 'text-black';
+  };
 
-// Fonction pour déterminer la couleur du prix
-const getPriceColor = (prixVenteReel, prixVenteConseille) => {
-  if (!prixVenteReel || prixVenteReel === 0) return 'text-black';
-  if (prixVenteReel < prixVenteConseille) return 'text-red-500';
-  if (prixVenteReel > prixVenteConseille) return 'text-green-500';
-  return 'text-black';
-};
-const loadCompositions = async () => {
-  try {
-    const data = await fetchCompositions();
-    
-    // Pour chaque composition, charger les détails des articles
-    const compositionsWithIngredients = await Promise.all(
-      data.map(async (composition) => {
-        if (composition.ingredientIds && composition.ingredientIds.length > 0) {
-          try {
-            const ingredients = await fetchArticlesByIds(composition.ingredientIds);
-            return {
-              ...composition,
-              ingredients: ingredients
-            };
-          } catch (error) {
-            console.error(`Erreur chargement ingrédients pour ${composition.nom}:`, error);
-            return {
-              ...composition,
-              ingredients: []
-            };
-          }
-        } else {
-          return {
-            ...composition,
-            ingredients: []
-          };
-        }
-      })
-    );
-    
-    setCompositions(compositionsWithIngredients);
-  } catch (error) {
-    console.error('Erreur:', error);
-    alert("Erreur lors du chargement des compositions");
-  }
-};
+  const loadCompositions = async () => {
+    try {
+      const data = await fetchCompositions();
+      
+      // Log pour déboguer
+      console.log("=== DONNÉES RECUES DES COMPOSITIONS ===");
+      data.forEach((comp, index) => {
+        console.log(`Composition ${index + 1}: ${comp.nom}`, {
+          id: comp.idComposition,
+          hasIngredients: comp.ingredients !== undefined && comp.ingredients !== null,
+          ingredientsCount: comp.ingredients?.length || 0,
+          ingredients: comp.ingredients
+        });
+      });
+      
+      // Les ingrédients sont déjà dans la réponse API
+      // Assurez-vous juste qu'ils existent
+      const compositionsWithIngredients = data.map(composition => ({
+        ...composition,
+        ingredients: composition.ingredients || [] // Garantir un tableau même si null/undefined
+      }));
+      
+      setCompositions(compositionsWithIngredients);
+    } catch (error) {
+      console.error('Erreur lors du chargement des compositions:', error);
+      alert("Erreur lors du chargement des compositions");
+    }
+  };
 
   const loadArticles = async () => {
     try {
@@ -182,7 +175,10 @@ const loadCompositions = async () => {
       console.log('Données envoyées:', compositionData);
       
       const newComposition = await createComposition(compositionData);
-      setCompositions(prev => [...prev, newComposition]);
+      
+      // Recharger les compositions pour avoir les données fraîches
+      await loadCompositions();
+      
       setForm(getInitialFormState());
       setSelectedIngredients([]);
       setIngredientSearch('');
@@ -559,18 +555,25 @@ const loadCompositions = async () => {
               </div>
               <div className="composition-overlay-list">
                 {hoveredComposition.ingredients?.map((ingredient, index) => (
-                  <div key={ingredient.idArticle} className="composition-overlay-item">
+                  <div key={ingredient.idArticle || index} className="composition-overlay-item">
                     <span className="composition-overlay-index">{index + 1}.</span>
-                    <span className="composition-overlay-name">{ingredient.nomArticle}</span>
+                    <span className="composition-overlay-name">
+                      {ingredient.nomArticle || 'Nom inconnu'}
+                    </span>
                     <span className="composition-overlay-price">
-                      {ingredient.prixAchatHtUnitaire?.toFixed(2)}€ HT
+                      {ingredient.prixAchatHtUnitaire?.toFixed(2) || '0.00'}€ HT
                     </span>
                   </div>
                 ))}
+                {(!hoveredComposition.ingredients || hoveredComposition.ingredients.length === 0) && (
+                  <div className="composition-overlay-no-ingredients">
+                    Aucun ingrédient
+                  </div>
+                )}
               </div>
               <div className="composition-overlay-footer">
                 <div className="composition-overlay-total">
-                  Total: {hoveredComposition.ingredients?.length} ingrédient(s)
+                  Total: {hoveredComposition.ingredients?.length || 0} ingrédient(s)
                 </div>
               </div>
             </div>
