@@ -421,6 +421,8 @@ h1 {
 
 .nav-link {
   color: white;
+    background-color: #34495e;
+
   text-decoration: none;
   padding: 15px 30px;
   font-weight: 500;
@@ -428,10 +430,7 @@ h1 {
   border-bottom: 3px solid transparent;
 }
 
-.nav-link:hover {
-  background-color: #34495e;
-  border-bottom-color: #3498db;
-}
+
 
 .nav-link.active {
   background-color: #3498db;

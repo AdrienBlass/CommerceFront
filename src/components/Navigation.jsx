@@ -22,7 +22,7 @@ export default function Navigation({ currentPage, onPageChange }) {
           onClick={() => handleNavigation('fournisseurs')}
           className={`nav-link ${currentPage === 'fournisseurs' ? 'active' : ''}`}
         >
-          Fournisseurs
+          Comparatif de prix fournisseurs
         </button>
         <button 
           onClick={() => handleNavigation('inventaire')}

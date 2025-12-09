@@ -43,7 +43,55 @@
   color: #dc3545;
   font-style: italic;
 }
+/* Style pour le sélecteur d'année */
+.year-selector {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
 
+.year-input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.year-input {
+  width: 100px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.year-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.year-label {
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .year-input-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
+  .year-label {
+    margin-left: 0;
+  }
+}
 .export-note {
   margin-top: 15px;
   padding-top: 10px;

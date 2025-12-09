@@ -261,7 +261,7 @@ export default function ArticlesList() {
               <label>Quantité</label>
               <input 
                 name="quantite" 
-                type="double" 
+                type="number" 
                 placeholder="Quantité" 
                 value={form.quantite} 
                 onChange={handleChange} 
