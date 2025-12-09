@@ -14,6 +14,17 @@ export const fetchArticles = async () => {
   }
 };
 
+export const fetchArticlesLatest = async () => {
+  try {
+    const response = await fetch(API_BASE_URL + '/latest');
+    if (!response.ok) throw new Error('Erreur lors de la récupération des articles récent');
+    return await response.json();
+  } catch (error) {
+    console.error('Erreur fetchArticleslatest:', error);
+    throw error;
+  }
+};
+
 // Créer un nouvel article
 export const createArticle = async (articleData) => {
   try {

@@ -868,6 +868,7 @@
   animation: composition-fadeIn 0.2s ease-out;
 }
 
+
 @keyframes composition-fadeIn {
   from {
     opacity: 0;
@@ -885,13 +886,41 @@
   position: absolute;
   top: -8px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) rotate(45deg);
   width: 16px;
   height: 16px;
   background: white;
   border-left: 2px solid #3498db;
   border-top: 2px solid #3498db;
+}
+
+/* Ajoutez ces nouvelles classes pour gérer l'orientation */
+.composition-overlay-top::before {
+  top: auto;
+  bottom: -8px;
+  transform: translateX(-50%) rotate(225deg);
+  border-left: 2px solid #3498db;
+  border-top: 2px solid #3498db;
+}
+
+.composition-overlay-bottom::before {
+  top: -8px;
+  bottom: auto;
   transform: translateX(-50%) rotate(45deg);
+  border-left: 2px solid #3498db;
+  border-top: 2px solid #3498db;
+}
+
+/* Animation pour les deux positions */
+@keyframes composition-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 .composition-overlay-content {
@@ -902,6 +931,8 @@
   max-height: 60vh;
   display: flex;
   flex-direction: column;
+    max-height: 60vh;
+  overflow-y: auto;
 }
 
 .composition-overlay-header {
@@ -1019,9 +1050,7 @@
 }
 
 /* Assurer que l'overlay soit au-dessus de tout */
-.composition-ingredients-overlay {
-  z-index: 10000;
-}
+
 
 
 /* Styles pour les prix éditables */

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './Composition.css';
 import { Trash2, Edit, Search, X } from 'lucide-react';
 
@@ -29,14 +29,63 @@ export default function Composition() {
   const [ingredientSearch, setIngredientSearch] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [hoveredComposition, setHoveredComposition] = useState(null);
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [tooltipPosition, setTooltipPosition] = useState({ 
+    x: 0, 
+    y: 0, 
+    adjustedY: 0,
+    position: 'bottom', // 'bottom' ou 'top'
+    arrowPosition: 'bottom' // Pour le CSS
+  });
   const [editingPrice, setEditingPrice] = useState(null);
   const [tempPrice, setTempPrice] = useState('');
+  const overlayRef = useRef(null);
+  const tooltipTimeoutRef = useRef(null);
 
   useEffect(() => {
     loadCompositions();
     loadArticles();
   }, []);
+
+  // Fonction pour calculer la position avec gestion de l'orientation
+  const calculateTooltipPosition = (rect) => {
+    // Pour position: fixed, on utilise les coordonnées du viewport
+    const x = rect.left + (rect.width / 2); // Centré horizontalement
+    
+    // Hauteur estimée de la popup (mesure réelle si possible)
+    const popupHeight = 300; // Hauteur estimée
+    
+    // Espace disponible en bas et en haut
+    const spaceBelow = window.innerHeight - rect.bottom - 20;
+    const spaceAbove = rect.top - 20;
+    
+    let adjustedY;
+    let position;
+    let arrowPosition;
+    
+    // Si suffisamment d'espace en bas, afficher en dessous
+    if (spaceBelow >= popupHeight || spaceBelow >= spaceAbove) {
+      adjustedY = rect.bottom + 5;
+      position = 'bottom';
+      arrowPosition = 'bottom';
+    } 
+    // Sinon, afficher au-dessus
+    else {
+      adjustedY = rect.top - popupHeight - 5;
+      position = 'top';
+      arrowPosition = 'top';
+    }
+    
+    // Position par défaut (sans ajustement)
+    const y = rect.bottom + 5;
+    
+    return { 
+      x, 
+      y, 
+      adjustedY, 
+      position,
+      arrowPosition
+    };
+  };
 
   const startEditingPrice = (composition) => {
     setEditingPrice(composition.idComposition);
@@ -504,15 +553,25 @@ export default function Composition() {
                 <div className="composition-cell composition-ingredients-cell">
                   <div 
                     className="composition-ingredients-count"
+                    data-composition-id={composition.idComposition}
                     onMouseEnter={(e) => {
-                      const rect = e.target.getBoundingClientRect();
+                      if (tooltipTimeoutRef.current) {
+                        clearTimeout(tooltipTimeoutRef.current);
+                      }
+                      
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const position = calculateTooltipPosition(rect);
+                      
                       setHoveredComposition(composition);
-                      setTooltipPosition({
-                        x: rect.left + rect.width / 2,
-                        y: rect.bottom + window.scrollY
-                      });
+                      setTooltipPosition(position);
                     }}
-                    onMouseLeave={() => setHoveredComposition(null)}
+                    onMouseLeave={() => {
+                      tooltipTimeoutRef.current = setTimeout(() => {
+                        if (!document.querySelector('.composition-ingredients-overlay:hover')) {
+                          setHoveredComposition(null);
+                        }
+                      }, 150);
+                    }}
                   >
                     {composition.ingredients?.length || 0} ingrédient(s)
                   </div>
@@ -535,13 +594,27 @@ export default function Composition() {
         {/* POPUP OVERLAY */}
         {hoveredComposition && (
           <div 
-            className="composition-ingredients-overlay"
+            ref={overlayRef}
+            className={`composition-ingredients-overlay ${
+              tooltipPosition.arrowPosition === 'top' 
+                ? 'composition-overlay-top' 
+                : 'composition-overlay-bottom'
+            }`}
             style={{
               left: `${tooltipPosition.x}px`,
-              top: `${tooltipPosition.y}px`,
+              top: `${tooltipPosition.adjustedY}px`,
+              transform: 'translateX(-50%)'
             }}
-            onMouseEnter={() => setHoveredComposition(hoveredComposition)}
-            onMouseLeave={() => setHoveredComposition(null)}
+            onMouseEnter={() => {
+              if (tooltipTimeoutRef.current) {
+                clearTimeout(tooltipTimeoutRef.current);
+              }
+            }}
+            onMouseLeave={() => {
+              tooltipTimeoutRef.current = setTimeout(() => {
+                setHoveredComposition(null);
+              }, 150);
+            }}
           >
             <div className="composition-overlay-content">
               <div className="composition-overlay-header">

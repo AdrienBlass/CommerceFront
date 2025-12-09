@@ -18,6 +18,18 @@ export default function Navigation({ currentPage, onPageChange }) {
         >
           Compositions
         </button>
+        <button 
+          onClick={() => handleNavigation('fournisseurs')}
+          className={`nav-link ${currentPage === 'fournisseurs' ? 'active' : ''}`}
+        >
+          Fournisseurs
+        </button>
+        <button 
+          onClick={() => handleNavigation('inventaire')}
+          className={`nav-link ${currentPage === 'inventaire' ? 'active' : ''}`}
+        >
+          Inventaire
+        </button>
       </div>
     </nav>
   );

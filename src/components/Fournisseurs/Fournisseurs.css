@@ -1,0 +1,357 @@
+/* Fournisseurs.css - Styles pour la liste des fournisseurs */
+
+/* Container principal */
+.fournisseurs-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* En-tête */
+.fournisseurs-header {
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #3498db;
+}
+
+.fournisseurs-title {
+  color: #2c3e50;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+/* Container des barres de recherche */
+.fournisseurs-search-container {
+  margin-bottom: 25px;
+}
+
+.fournisseurs-search-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.fournisseurs-search-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.fournisseurs-search-label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #495057;
+  font-size: 14px;
+}
+
+.fournisseurs-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.fournisseurs-search-box svg {
+  position: absolute;
+  left: 15px;
+  color: #6c757d;
+}
+
+.fournisseurs-search-input {
+  width: 100%;
+  padding: 12px 12px 12px 45px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.fournisseurs-search-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.fournisseurs-search-clear {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+}
+
+.fournisseurs-search-clear:hover {
+  color: #e74c3c;
+}
+
+/* Actions de recherche */
+.fournisseurs-search-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.fournisseurs-clear-all-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.fournisseurs-clear-all-btn:hover {
+  background: #c0392b;
+  transform: translateY(-1px);
+}
+
+/* Statistiques */
+.fournisseurs-stats {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #dee2e6;
+  margin-bottom: 25px;
+}
+
+.fournisseurs-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.fournisseurs-stat-item:last-child {
+  margin-bottom: 0;
+}
+
+.fournisseurs-stat-label {
+  color: #495057;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 150px;
+}
+
+.fournisseurs-stat-value {
+  color: #2c3e50;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Tags de filtres */
+.fournisseurs-filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.fournisseurs-filter-tag {
+  background: #3498db;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fournisseurs-filter-tag-remove {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.fournisseurs-filter-tag-remove:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Message vide */
+.fournisseurs-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+  font-size: 16px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #dee2e6;
+}
+
+/* Groupes de fournisseurs */
+.fournisseurs-group {
+  margin-bottom: 40px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #dee2e6;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.fournisseurs-group-header {
+  background: #2c3e50;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fournisseurs-group-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.fournisseurs-group-count {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Tableau */
+.fournisseurs-table-container {
+  overflow-x: auto;
+}
+
+.fournisseurs-table-header {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr 0.8fr 1fr 1fr 1fr;
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+}
+
+.fournisseurs-table-row {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr 0.8fr 1fr 1fr 1fr;
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.3s ease;
+}
+
+.fournisseurs-table-row:hover {
+  background-color: #f8f9fa;
+}
+
+.fournisseurs-table-cell {
+  padding: 15px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  text-align: center;
+  word-break: break-word;
+  font-size: 14px;
+}
+
+.fournisseurs-table-header .fournisseurs-table-cell {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .fournisseurs-container {
+    padding: 15px;
+  }
+  
+  .fournisseurs-search-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .fournisseurs-group-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  
+  .fournisseurs-table-header,
+  .fournisseurs-table-row {
+    min-width: 900px;
+  }
+  
+  .fournisseurs-stat-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
+  .fournisseurs-stat-label {
+    min-width: auto;
+  }
+  
+  .fournisseurs-filter-tags {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 576px) {
+  .fournisseurs-title {
+    font-size: 1.5rem;
+  }
+  
+  .fournisseurs-group-title {
+    font-size: 1rem;
+  }
+  
+  .fournisseurs-search-input {
+    padding: 10px 10px 10px 40px;
+  }
+}
+
+/* Animations */
+@keyframes fournisseurs-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fournisseurs-group {
+  animation: fournisseurs-fadeIn 0.3s ease-out;
+}
+
+/* Scrollbar personnalisée */
+.fournisseurs-table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.fournisseurs-table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.fournisseurs-table-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.fournisseurs-table-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
